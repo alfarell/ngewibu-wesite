@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.nav {
+  z-index: 99;
+  transition: width 0.5s, position 0.5s;
+}
+
+.scrolled {
+  width: 100vw;
+  position: fixed;
+  transition: width 0.5s, position 0.5s;
+}
+
+.ant-menu-submenu .ant-menu {
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useMemo } from 'react'
+import {
+  CssBaseline,
+  createMuiTheme,
+  ThemeProvider,
+  useMediaQuery,
+  Grid,
+  Container
+} from '@material-ui/core'
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routes from './routes';
+import { blue } from '@material-ui/core/colors';
+import { NavBar } from './components';
 
-function App() {
+
+const App = () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
+
+  const theme = useMemo(() =>
+    createMuiTheme({
+      palette: {
+        primary: blue,
+        type: prefersDarkMode ? 'dark' : 'light',
+      },
+    }), [prefersDarkMode]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme} >
+      <CssBaseline />
+      <Router>
+        <Grid container direction='column'>
+          <Grid item>
+            <NavBar />
+          </Grid>
+          <Grid item container>
+            <Container maxWidth={false} style={{ paddingTop: 20, paddingBottom: 20 }}>
+              <Routes />
+            </Container>
+          </Grid>
+        </Grid>
+      </Router>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
