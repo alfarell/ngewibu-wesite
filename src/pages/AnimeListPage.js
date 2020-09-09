@@ -1,8 +1,8 @@
 import React from 'react'
 import QUERIES from '../settings/graphql/queries/ContentQueries'
 import { currentSeason, currentYear, nextSeason } from '../utils/SetSeason'
-import getQuery from '../utils/GetQuery'
 import gqlMediaWrapper from './GQLMediaWrapper'
+import { Button } from '@material-ui/core'
 
 const AnimeListPage = ({ animeList, location }) => {
   const {
@@ -40,6 +40,13 @@ const AnimeListPage = ({ animeList, location }) => {
 
   return (
     <>
+      {loading && <p>Loading...</p>}
+      {error && (
+        <div>
+          <p>Failed to get media</p>
+          <Button onClick={() => refetch()}>Try Again</Button>
+        </div>
+      )}
       {listData.map(({ id, data, title }) => {
         if (data) {
           return (
