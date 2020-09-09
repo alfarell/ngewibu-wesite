@@ -1,54 +1,84 @@
 import React from 'react'
-import DocumentTitle from 'react-document-title'
-import { Grid } from '@material-ui/core'
-import { graphql } from '@apollo/react-hoc'
-import { flowRight as compose } from 'lodash'
-import { useLocation } from 'react-router-dom'
-import { Filter } from '../components'
 import QUERIES from '../settings/graphql/queries/ContentQueries'
 import { currentSeason, currentYear, nextSeason } from '../utils/SetSeason'
+import getQuery from '../utils/GetQuery'
+import gqlMediaWrapper from './GQLMediaWrapper'
 
-const AnimeListPage = (props) => {
-  console.log(props);
+const AnimeListPage = ({ animeList, location }) => {
+  const {
+    trending,
+    upcoming,
+    popular,
+    top,
+    loading,
+    error,
+    refetch,
+  } = animeList
+
+  const listData = [
+    {
+      id: 1,
+      data: trending,
+      title: 'Trending This Season'
+    },
+    {
+      id: 2,
+      data: upcoming,
+      title: 'Upccoming Next Season'
+    },
+    {
+      id: 3,
+      data: popular,
+      title: 'Popular Anime'
+    },
+    {
+      id: 4,
+      data: top,
+      title: 'Top Anime'
+    },
+  ]
+
   return (
-    <DocumentTitle title="Anime Page">
-      <Grid container direction='row' justify='space-between'>
-        <Grid item xs={12} md={3} lg={2}>
-          <Filter />
-        </Grid>
-        <Grid item xs={12} md={9} lg={10}>
-        </Grid>
-      </Grid>
-    </DocumentTitle>
+    <>
+      {listData.map(({ id, data, title }) => {
+        if (data) {
+          return (
+            <div key={id}>
+              <h3>{title}</h3>
+              <div style={{ width: '100%', padding: '10px 0' }} key={id}>
+                {data.media.map(media => {
+                  return (
+                    <div key={media.id} style={{ display: 'inline-block', height: 240, width: 150, margin: 5, boxSizing: 'border-box', overflow: 'hidden' }}>
+                      <img src={media.coverImage.large} alt={media.title.romaji} style={{ height: 200, width: 150 }} />
+                      <p style={{ overflow: 'hidden' }}>{media.title.romaji}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        }
+      })}
+    </>
   )
 }
 
-export default compose(
-  graphql(QUERIES.MEDIA_LIST_QUERY, {
-    name: 'Trending',
-    alias: 'Trending',
-    options: {
-      variables: {
-        page: 1,
-        perPage: 8,
-        season: currentSeason,
-        seasonYear: currentYear,
-        sort: 'TRENDING_DESC',
-        type: 'ANIME',
-      }
+const AnimeQueries = {
+  query: QUERIES.MEDIA_DEFAULT_QUERY,
+  name: 'animeList',
+  options: {
+    variables: {
+      page: 1,
+      perPage: 8,
+      season: currentSeason,
+      nextSeason: nextSeason,
+      seasonYear: currentYear,
+      type: 'ANIME',
     }
-  }),
-  graphql(QUERIES.MEDIA_LIST_QUERY, {
-    name: 'Upcoming',
-    options: {
-      variables: {
-        page: 1,
-        perPage: 8,
-        season: nextSeason,
-        seasonYear: currentYear,
-        sort: 'POPULARITY_DESC',
-        type: 'ANIME',
-      }
-    }
-  }),
-)(AnimeListPage)
+  }
+}
+
+export default gqlMediaWrapper(AnimeListPage, {
+  pageTitle: 'Anime List',
+  gqlQuery: AnimeQueries
+})
