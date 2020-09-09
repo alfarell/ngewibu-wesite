@@ -1,39 +1,17 @@
 import { gql } from '@apollo/client';
 import Fragments from "../fragments/Fragments";
+import { PAGE_QUERY, DEFAULT_MEDIA_LIST } from './QueryFields';
 
 
 const { mediaList, pageInfo } = Fragments;
 
-const PAGE_QUERY = `
-  Page(page: $page, perPage: $perPage) {
-    pageInfo {
-      ...PageInfo
-    }
-    media(
-      sort: $sort,
-      type: $type,
-      isAdult: false,
-      season: $season,
-      seasonYear: $seasonYear,
-      genre_in: $genreIn,
-      tag_in: $tagIn,
-      search: $search
-    ) {
-      ...MediaList
-    }
-  }
-`;
-
-const MediaListQuery = (field) => gql`
+const generateMediaSmallQuery = (field) => gql`
   query MediaSmall(
-    $page: Int, 
-    $perPage: Int, 
-    $sort: [MediaSort],
+    $page: Int,
+    $perPage: Int,
     $season: MediaSeason,
+    $nextSeason: MediaSeason,
     $seasonYear: Int,
-    $genreIn: [String],
-    $tagIn: [String],
-    $search: String,
     $type: MediaType
   ) {
     ${field}
@@ -42,9 +20,13 @@ const MediaListQuery = (field) => gql`
 
 const QUERIES = {
   MEDIA_LIST_QUERY: gql`
-    ${MediaListQuery(PAGE_QUERY)}
+    ${generateMediaSmallQuery(PAGE_QUERY)}
     ${mediaList}
     ${pageInfo}
+  `,
+  MEDIA_DEFAULT_QUERY: gql`
+    ${generateMediaSmallQuery(DEFAULT_MEDIA_LIST)}
+    ${mediaList}
   `,
 }
 
