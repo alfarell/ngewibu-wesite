@@ -1,5 +1,5 @@
-const getQuery = (query) => {
+const getURLQuery = (query) => {
   return new URLSearchParams(query)
 }
 
-export default getQuery
+export default getURLQuery
