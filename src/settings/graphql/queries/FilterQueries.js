@@ -1,21 +1,21 @@
 import { gql } from '@apollo/client';
 
-const getGenreQuery = gql`
-    query {
-        GenreCollection
-    }
+const GENRE_LIST_QUERY = gql`
+  query Genres{
+    GenreCollection
+  }
 `;
 
-const getTagsQuery = gql`
-    query {
-        MediaTagCollection {
-            id
-            name
-            description
-            category
-            isAdult
-        }
+const TAG_LIST_QUERY = gql`
+  query Tags{
+    MediaTagCollection {
+      id
+      name
+      description
+      category
+      isAdult
     }
+  }
 `;
 
-export { getGenreQuery, getTagsQuery };
+export { GENRE_LIST_QUERY, TAG_LIST_QUERY };
