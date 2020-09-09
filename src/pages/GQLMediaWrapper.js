@@ -1,10 +1,7 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 import { Grid } from '@material-ui/core'
 import { graphql } from '@apollo/react-hoc'
-import { flowRight as compose } from 'lodash'
-import getQuery from '../utils/GetQuery'
 import { Filter } from '../components'
 
 const gqlMediaWrapper = (Component, { pageTitle, gqlQuery }) => {
