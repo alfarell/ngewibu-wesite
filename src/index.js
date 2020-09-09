@@ -2,42 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/styles/index.css';
 import App from './App';
-import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloProvider, ApolloClient } from '@apollo/client'
 import configureStore from './redux/store';
 import { Provider } from 'react-redux';
+import customLink from './settings/app/apollo-link';
+import customCache from './settings/app/apollo-cache';
 
 //apollo client setup
-const link = new HttpLink({
-  uri: process.env.REACT_APP_BASE_URL,
-  method: "POST"
-})
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        Page: {
-          keyArgs: (_, { variables, field }) => {
-            const { type, sort } = variables
-            return `${type} ${sort || 'default'}`
-          },
-        }
-      }
-    },
-
-    Page: {
-      fields: {
-        media: {
-          merge: (existing = [], incoming) => {
-            return [...existing, ...incoming]
-          }
-        },
-      }
-    },
-  }
-})
 const client = new ApolloClient({
-  link,
-  cache,
+  link: customLink,
+  cache: customCache,
 })
 
 //redux setup
