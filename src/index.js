@@ -17,20 +17,20 @@ const cache = new InMemoryCache({
       fields: {
         Page: {
           keyArgs: (_, { variables, field }) => {
-            console.log(field);
             const { type, sort } = variables
-            return `${type} ${sort}`
+            return `${type} ${sort || 'default'}`
           },
         }
       }
     },
+
     Page: {
       fields: {
         media: {
           merge: (existing = [], incoming) => {
             return [...existing, ...incoming]
           }
-        }
+        },
       }
     },
   }
