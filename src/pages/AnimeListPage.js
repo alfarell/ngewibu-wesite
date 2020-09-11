@@ -81,11 +81,12 @@ const AnimeQueries = {
       nextSeason: nextSeason,
       seasonYear: currentYear,
       type: 'ANIME',
-    }
+    },
+    notifyOnNetworkStatusChange: true
   }
 }
 
 export default gqlMediaWrapper(AnimeListPage, {
   pageTitle: 'Anime List',
-  gqlQuery: AnimeQueries
+  initialQuery: AnimeQueries
 })
