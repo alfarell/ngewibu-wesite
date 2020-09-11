@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { graphql } from '@apollo/react-hoc'
 import { Filter } from '../components'
 
-const gqlMediaWrapper = (Component, { pageTitle, gqlQuery }) => {
+const gqlMediaWrapper = (Component, { pageTitle, initialQuery }) => {
   const RenderComponent = (props) => {
     return (
       <DocumentTitle title={pageTitle}>
@@ -20,7 +20,7 @@ const gqlMediaWrapper = (Component, { pageTitle, gqlQuery }) => {
     )
   }
 
-  const { query, name, options } = gqlQuery
+  const { query, name, options } = initialQuery
 
   return graphql(query, {
     name: name || 'data',
