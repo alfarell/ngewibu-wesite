@@ -11,6 +11,7 @@ import { GENRE_LIST_QUERY, TAG_LIST_QUERY } from '../../settings/graphql/queries
 import { useLocation } from 'react-router-dom'
 import getURLQuery from '../../utils/GetQuery'
 import FilterSubMenu from './FilterSubMenu'
+import { generateGenreData, generateTagData } from '../../utils/GenerateFiltersData'
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,6 +28,9 @@ const Filter = ({ GetGenreList, GetTagList }) => {
   const query = getURLQuery(location.search)
   console.log(query.getAll('genres'));
 
+  const genreData = generateGenreData(GetGenreList)
+  const tagData = generateTagData(GetTagList)
+
   return (
     <Paper className={classes.container}>
       <List
@@ -38,8 +42,8 @@ const Filter = ({ GetGenreList, GetTagList }) => {
           </ListSubheader>
         }
       >
-        <FilterSubMenu genreList={GetGenreList} title='Genres' />
-        <FilterSubMenu tagList={GetTagList} title='Tags' />
+        <FilterSubMenu data={genreData} title='Genres' />
+        <FilterSubMenu data={tagData} title='Tags' />
       </List>
     </Paper>
   )
